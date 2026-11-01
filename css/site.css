@@ -34,6 +34,7 @@ html.voa .rumo{display:block;position:absolute;z-index:3;left:50%;bottom:calc(84
 @keyframes rumo{50%{transform:translateY(8px)}}
 /* abertura */
 html.voa .abre{display:block;position:absolute;left:50%;top:11svh;width:min(46vw,440px,36svh);translate:-50% 0;transform-origin:0 0;color:var(--tinta);z-index:4}
+html.voa .abre{will-change:transform}.abre.a-voar path{animation:none}.abre-br{position:absolute;inset:0;color:#fff;opacity:0;will-change:opacity;transition:opacity .22s linear .24s}
 .abre .l-g,.abre .l-d,.abre .l-r,.abre .l-t{animation:traco .7s var(--ease) both}
 .abre .l-g{animation-delay:.66s}.abre .l-d{animation-delay:.76s}.abre .l-r{animation-delay:.86s}.abre .l-t{animation:palavra .5s var(--ease) 1.06s both}
 /* a noite rasga-se pela curva do logótipo, com o rasto de uns faróis, e o stand aparece */
@@ -48,7 +49,7 @@ html.voa .poster{animation:chega 1.25s cubic-bezier(.16,1,.3,1) .56s both}@keyfr
 @media(prefers-reduced-motion:reduce){html.voa .noite,html.voa .rasto{display:none}html.voa .poster{animation:none}}
 @keyframes traco{from{clip-path:inset(0 100% 0 0);transform:translate(-300px,-260px)}to{clip-path:inset(0 0 0 0);transform:none}}
 @keyframes palavra{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
-html.voa #titulo{opacity:.01}html.voa.titulo #titulo{opacity:1;animation:sobe .8s var(--ease) both}
+html.voa #titulo{opacity:.001}html.voa:not(.titulo) .pil-logo{visibility:hidden}html.voa.titulo #titulo{opacity:1;animation:sobe .8s var(--ease) both}
 @keyframes sobe{from{opacity:0;transform:translateY(40%)}to{opacity:1;transform:none}}
 /* sala de stock */
 .sala{position:relative;flex:none;display:block;text-decoration:none;color:var(--tinta);user-select:none}
@@ -58,7 +59,7 @@ html.voa .sala img{width:100%;height:100%;object-fit:cover;object-position:50% 6
 @media(max-aspect-ratio:1/1){html.voa .sala{width:128vw;margin-right:-14vw}html.voa .sala img{height:auto;aspect-ratio:3/2;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 20%,#000 90%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 20%,#000 90%,transparent);mask-composite:intersect}}
 .s-leg{position:absolute;left:12%;bottom:calc(9svh + 40px);display:grid;gap:0;color:#fff;text-shadow:0 1px 14px rgba(0,0,0,.65);transition:translate .3s var(--ease)}.s-leg b{font-size:clamp(24px,3.2vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1.05}.s-leg i{font-style:normal;font-size:15px}.s-leg em{font-style:normal;font-weight:600;font-size:21px;margin-top:6px}.sala:hover .s-leg{translate:0 -6px}
 @media(max-aspect-ratio:1/1){.s-leg{left:13vw;bottom:calc(84px + 8svh);color:#fff}}
-.sala-fim{flex-direction:column;gap:6px;background:none;color:var(--tinta)}html.voa .sala-fim{width:100vw;margin:0;flex-direction:column}.sala-fim b{font-size:clamp(90px,17vw,240px);line-height:.9;font-weight:600;letter-spacing:-.04em}.sala-fim span{font-size:21px}.sala-fim u{margin-top:18px;font-weight:600;text-underline-offset:5px;min-height:44px}
+.sala-fim{flex-direction:column;gap:6px;background:none;color:var(--tinta)}html.voa .sala-fim{width:100vw;margin:0;flex-direction:column}.sala-fim b{font-size:clamp(90px,17vw,240px);line-height:.9;font-weight:600;letter-spacing:-.04em}.sala-fim span{font-size:21px}.sala-fim u{margin-top:22px;display:inline-flex;align-items:center;height:52px;padding:0 30px;border-radius:99px;background:var(--tinta);color:#fff;font-weight:600;text-decoration:none;transition:transform .2s var(--ease)}.sala-fim:hover u{transform:translateY(-1px)}
 /* secções */
 section{scroll-margin-top:80px}
 .res{background:var(--tinta);color:#fff;padding:clamp(70px,11vw,150px) max(16px,5vw);display:grid;gap:44px;grid-template-columns:1.05fr 1fr;align-items:center;clip-path:ellipse(120% 100% at 50% 100%);margin-top:-1px}
@@ -164,3 +165,5 @@ a.r-lr{background:#8f1b13;border-radius:10px;padding:10px 14px;min-height:48px}.
 .setas[hidden]{display:none}.r-col>a{min-height:44px}.p-t a{min-height:56px}
 .r-col>a{min-width:44px}
 @media(max-width:900px){.ep{flex:none!important;width:74vw}}
+
+@media(min-height:600px){html.voa .sala-fim{padding-bottom:34svh}}

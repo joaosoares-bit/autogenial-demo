@@ -23,7 +23,7 @@ function mede(){
  if(palco.clientWidth===medidoW&&palco.clientHeight===medidoH&&carril.scrollWidth===railW)return;medidoW=palco.clientWidth;medidoH=palco.clientHeight;
  vw=palco.clientWidth;vh=palco.clientHeight||innerHeight;dpr=Math.min(devicePixelRatio||1,vw<700?1.75:1.5);tela.width=Math.round(vw*dpr);tela.height=Math.round(vh*dpr);
  s0=Math.max(vw/W,vh/H);s1=Math.max(vh/PANE.h,vw/PANE.w);
- var cx=Math.min(W-vw/(2*s0),Math.max(vw/(2*s0),F.x)),ti=d.getElementById('titulo'),fimLogo=fimLogo||abre.offsetTop+abre.offsetHeight,fimT=Math.max(ti.offsetTop+ti.offsetHeight,fimLogo),cy=H-vh/(2*s0);
+ var cx=Math.min(W-vw/(2*s0),Math.max(vw/(2*s0),F.x)),ti=d.getElementById('titulo'),fl=abre.parentNode===entrada?(fimLogo=abre.offsetTop+abre.offsetHeight):fimLogo,fimT=Math.max(ti.offsetTop+ti.offsetHeight,fl),cy=H-vh/(2*s0);
  // o letreiro fica sempre abaixo do título: em ecrãs largos a câmara mostra mais céu
  cy=Math.max(vh/(2*s0),Math.min(cy,TOPO_LETREIRO-(fimT+20-vh/2)/s0));c0={x:cx,y:cy};
  var fx=W-vw/s0,fy=H-vh/s0;poster.style.objectPosition=(fx>1?(cx-vw/(2*s0))/fx*100:50)+'% '+(fy>1?(cy-vh/(2*s0))/fy*100:50)+'%';
@@ -84,5 +84,6 @@ mede();if(d.fonts&&d.fonts.ready)d.fonts.ready.then(function(){medidoW=0;mede()}
 function fimAbre(){root.classList.add('titulo');abre.style.display='none';d.getElementById('noite').style.display=d.getElementById('rasto').style.display='none';pil.classList.remove('oculta')}
 if(scrollY>10){fimAbre();return}
 pil.classList.add('oculta');
-setTimeout(function(){var a=abre.getBoundingClientRect(),b=pil.querySelector('.pil-logo .logo').getBoundingClientRect();abre.style.transition='transform .6s cubic-bezier(.7,0,.2,1)';abre.style.transform='translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+b.width/a.width+')';abre.style.color='#fff';var feito=false,go=function(){if(feito)return;feito=true;fimAbre()};abre.addEventListener('transitionend',go,{once:true});setTimeout(go,800)},1850);
+// o logótipo sai para o corpo da página para voar por cima da pílula (por baixo dela apagava-se e reaparecia de repente); a cor muda num fundido de duas camadas, sem pintar nada durante o voo
+setTimeout(function(){var a=abre.getBoundingClientRect(),b=pil.querySelector('.pil-logo .logo').getBoundingClientRect(),br=abre.firstElementChild.cloneNode(true);abre.classList.add('a-voar');abre.style.cssText='position:fixed;left:'+a.left+'px;top:'+a.top+'px;width:'+a.width+'px;translate:none;margin:0;z-index:60;pointer-events:none';br.classList.add('abre-br');abre.appendChild(br);d.body.appendChild(abre);var feito=false,go=function(){if(feito)return;feito=true;fimAbre()};requestAnimationFrame(function(){requestAnimationFrame(function(){abre.style.transition='transform .6s cubic-bezier(.7,0,.2,1)';abre.style.transform='translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+b.width/a.width+')';br.style.opacity=1;abre.addEventListener('transitionend',go,{once:true});setTimeout(go,800)})})},1850);
 })();
