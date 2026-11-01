@@ -111,3 +111,4 @@ html:not(.voa) .s-foto{position:static}
 .s-res{position:absolute;left:12%;bottom:calc(9svh - 12px);display:flex;align-items:center;height:48px;text-decoration:none;white-space:nowrap}
 @media(max-aspect-ratio:1/1){.s-res{left:21vw;bottom:calc(84px + 8svh - 58px)}.s-leg{bottom:calc(84px + 8svh + 4px)}}
 @media(max-height:480px){.s-res{left:auto;right:16%;bottom:60px;height:44px;font-size:14px}}
+html.voa .carril:not(.perto) .s-res{visibility:hidden}

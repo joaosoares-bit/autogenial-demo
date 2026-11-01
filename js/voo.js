@@ -46,7 +46,7 @@ function quadro(){
  entrada.style.transform='translateY('+(-Math.min(1,p*7)*vh*.36)+'px)';entrada.style.opacity=(1-Math.min(1,p*7)).toFixed(3);
  rumo.style.opacity=p>.03?0:1;var mp=palco.querySelector('.marca-prop');if(mp)mp.style.opacity=p>.03?0:1;
  palco.style.pointerEvents='';tela.style.pointerEvents=p<1?'auto':'none';
- carril.lastElementChild.style.visibility=p>.9?'visible':'hidden';
+ carril.lastElementChild.style.visibility=p>.9?'visible':'hidden';carril.classList.toggle('perto',p>.9);
  P=p;
 }
 var pedido=false;function agenda(){if(pedido)return;pedido=true;requestAnimationFrame(function(){pedido=false;quadro()})}
