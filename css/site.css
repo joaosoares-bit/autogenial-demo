@@ -163,3 +163,4 @@ a.r-lr{background:#8f1b13;border-radius:10px;padding:10px 14px;min-height:48px}.
 .m-hist figure img{filter:none}
 .setas[hidden]{display:none}.r-col>a{min-height:44px}.p-t a{min-height:56px}
 .r-col>a{min-width:44px}
+@media(max-width:900px){.ep{flex:none!important;width:74vw}}
