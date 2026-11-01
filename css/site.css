@@ -23,19 +23,29 @@ button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:2px soli
 .poster{width:100%;height:70svh;object-fit:cover;object-position:50% 85%}#tela{display:none}
 .interior{overflow-x:auto}.carril{display:flex}.luz,.rumo{display:none}
 .entrada{position:absolute;inset:0 0 auto;padding-top:calc(max(12px,env(safe-area-inset-top)) + 84px);padding-inline:max(16px,env(safe-area-inset-left));text-align:center;color:var(--tinta);pointer-events:none}
-.abre{display:none}#titulo{font-size:clamp(36px,4.4vw,68px);font-weight:600;max-width:20em;margin:auto}
+.abre{display:none}#titulo{font-size:clamp(36px,min(4vw,7svh),64px);line-height:1.04;font-weight:600;max-width:9.6em;margin:auto;text-wrap:balance}
 html.voa .voo{position:relative}html.voa .palco{position:sticky;top:0;height:100svh;contain:layout paint}
-html.voa .poster{position:absolute;inset:0;height:100%;z-index:1}html.voa #tela{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:2}
-html.voa .interior{position:absolute;inset:0;overflow:visible;z-index:0;will-change:transform;transform-origin:50% 50%}
+html.voa .poster{position:absolute;inset:0;height:100%;z-index:1;object-position:50% 100%}html.voa #tela{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:2;opacity:0;transition:opacity .45s linear}
+html.voa .interior{visibility:hidden;position:absolute;inset:0;overflow:visible;z-index:0;will-change:transform;transform-origin:50% 50%}
 html.voa .carril{position:absolute;left:0;top:0;height:100%;will-change:transform}
 html.voa .luz{display:block;position:absolute;inset:-400vh;background:#160b05;opacity:.6;pointer-events:none}
 html.voa .entrada{z-index:3}
 html.voa .rumo{display:block;position:absolute;z-index:3;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));translate:-50% 0;width:34px;color:#fff;animation:rumo 1.8s ease-in-out infinite;transition:opacity .3s}.rumo svg{fill:none;stroke:currentColor;stroke-width:1.8}
 @keyframes rumo{50%{transform:translateY(8px)}}
 /* abertura */
-html.voa .abre{display:block;position:absolute;left:50%;top:11svh;width:min(46vw,440px);translate:-50% 0;transform-origin:0 0;color:var(--tinta);z-index:4}
-.abre .l-g,.abre .l-d,.abre .l-r,.abre .l-t{animation:traco .9s var(--ease) both}
-.abre .l-g{animation-delay:.1s}.abre .l-d{animation-delay:.28s}.abre .l-r{animation-delay:.46s}.abre .l-t{animation:palavra .7s var(--ease) .85s both}
+html.voa .abre{display:block;position:absolute;left:50%;top:11svh;width:min(46vw,440px,36svh);translate:-50% 0;transform-origin:0 0;color:var(--tinta);z-index:4}
+.abre .l-g,.abre .l-d,.abre .l-r,.abre .l-t{animation:traco .7s var(--ease) both}
+.abre .l-g{animation-delay:.66s}.abre .l-d{animation-delay:.76s}.abre .l-r{animation-delay:.86s}.abre .l-t{animation:palavra .5s var(--ease) 1.06s both}
+/* a noite rasga-se pela curva do logótipo, com o rasto de uns faróis, e o stand aparece */
+.noite,.rasto{display:none}
+html.voa .noite,html.voa .rasto{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:visible}
+.noite path{fill:#08090b}.noite .n1{animation:n-cima .78s cubic-bezier(.7,0,.15,1) .56s both}.noite .n2{animation:n-baixo .78s cubic-bezier(.7,0,.15,1) .56s both}
+@keyframes n-cima{to{transform:translateY(-1100px)}}@keyframes n-baixo{to{transform:translateY(1100px)}}
+html.voa .rasto{animation:r-corre .5s cubic-bezier(.55,0,.8,.4) .08s both,r-sai .36s linear .84s both}
+.rasto path{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round}.r-v{stroke:#e30613;stroke-width:9px;stroke-opacity:.85}.r-b{stroke:#fff;stroke-width:2.5px}
+@keyframes r-corre{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% -5% -20% 0)}}@keyframes r-sai{to{opacity:0}}
+html.voa .poster{animation:chega 1.25s cubic-bezier(.16,1,.3,1) .56s both}@keyframes chega{from{transform:scale(1.12)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){html.voa .noite,html.voa .rasto{display:none}html.voa .poster{animation:none}}
 @keyframes traco{from{clip-path:inset(0 100% 0 0);transform:translate(-300px,-260px)}to{clip-path:inset(0 0 0 0);transform:none}}
 @keyframes palavra{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
 html.voa #titulo{opacity:.01}html.voa.titulo #titulo{opacity:1;animation:sobe .8s var(--ease) both}
@@ -112,3 +122,4 @@ html:not(.voa) .s-foto{position:static}
 @media(max-aspect-ratio:1/1){.s-res{left:21vw;bottom:calc(84px + 8svh - 58px)}.s-leg{bottom:calc(84px + 8svh + 4px)}}
 @media(max-height:480px){.s-res{left:auto;right:16%;bottom:60px;height:44px;font-size:14px}}
 html.voa .carril:not(.perto) .s-res{visibility:hidden}
+html.voa:not(.titulo) .rumo,html.voa:not(.titulo) .marca-prop{visibility:hidden}
