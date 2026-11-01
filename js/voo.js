@@ -10,7 +10,7 @@ var lay={};
 // descodifica fora do fio principal: a primeira pintura de cada camada nunca trava o scroll
 function pronta(n,im,box,w){lay[n]={i:im,b:box,w:w,t:performance.now()};corre()}
 function porImagem(n,src,box){var i=new Image();i.decoding='async';i.src=src;(i.decode?i.decode():Promise.resolve()).catch(function(){}).then(function(){if(i.naturalWidth)pronta(n,i,box,i.naturalWidth);else i.onload=function(){pronta(n,i,box,i.naturalWidth)}})}
-function carrega(n,src,box){if(!window.createImageBitmap||!window.fetch)return porImagem(n,src,box);fetch(src).then(function(r){return r.blob()}).then(createImageBitmap).then(function(b){pronta(n,b,box,b.width)}).catch(function(){porImagem(n,src,box)})}
+function carrega(n,src,box){if(!window.createImageBitmap||!window.fetch)return porImagem(n,src,box);fetch(src,{priority:'low'}).then(function(r){return r.blob()}).then(createImageBitmap).then(function(b){pronta(n,b,box,b.width)}).catch(function(){porImagem(n,src,box)})}
 var todo={x:0,y:0,w:W,h:H},detBox={x:2400,y:3100,w:2800,h:1400};
 carrega('fachada','/autogenial-demo/img/h/fachada.webp',todo);carrega('reflexo','/autogenial-demo/img/h/reflexo.webp',todo);
 // a frente e o pormenor chegam depois da primeira pintura
