@@ -17,7 +17,7 @@ var todo={x:0,y:0,w:W,h:H},detBox={x:2400,y:3100,w:2800,h:1600};
 // a frente e o pormenor chegam depois da primeira pintura
 var maisTarde=false;function resto(){if(maisTarde)return;maisTarde=true;carrega('fachada','/autogenial-demo/img/h/fachada.webp',todo);carrega('reflexo','/autogenial-demo/img/h/reflexo.webp',todo);carrega('det','/autogenial-demo/img/h/det.webp',detBox);carrega('detref','/autogenial-demo/img/h/detref.webp',detBox)}
 addEventListener('load',function(){setTimeout(resto,1300)});addEventListener('scroll',resto,{once:true,passive:true});
-var vw,vh,dpr,s0,s1,c0,railW,vooPx,railPx,top0,x0=0,percurso=0,medidoW=0,medidoH=0,fimLogo=0;
+var vw,vh,dpr,s0,s1,c0,railW,vooPx,railPx,top0,x0=0,percurso=0,medidoW=0,medidoH=0,fimLogo=0,salas=[],ALTO=matchMedia('(max-aspect-ratio:1/1)'),alto=false;
 function mede(){
  // a barra do browser a esconder-se no telemóvel não muda o palco: não se refaz nada
  if(palco.clientWidth===medidoW&&palco.clientHeight===medidoH&&carril.scrollWidth===railW)return;medidoW=palco.clientWidth;medidoH=palco.clientHeight;
@@ -27,7 +27,9 @@ function mede(){
  // o letreiro fica sempre abaixo do título: em ecrãs largos a câmara mostra mais céu
  cy=Math.max(vh/(2*s0),Math.min(cy,TOPO_LETREIRO-(fimT+20-vh/2)/s0));c0={x:cx,y:cy};
  var fx=W-vw/s0,fy=H-vh/s0;poster.style.objectPosition=(fx>1?(cx-vw/(2*s0))/fx*100:50)+'% '+(fy>1?(cy-vh/(2*s0))/fy*100:50)+'%';
- railW=carril.scrollWidth;var ant=carril.querySelectorAll('.sala-antes'),pri=carril.querySelector('.sala:not(.sala-antes)');x0=pri.offsetLeft+pri.offsetWidth/2-vw/2;percurso=Math.max(0,railW-x0-vw);vooPx=vh*2.9;railPx=percurso*.85;voo.style.height=(vh+vooPx+railPx+vh*.15)+'px';top0=voo.offsetTop;yv=alvoY();agora=-1;quadro()}
+ railW=carril.scrollWidth;var ant=carril.querySelectorAll('.sala-antes'),pri=carril.querySelector('.sala:not(.sala-antes)');x0=pri.offsetLeft+pri.offsetWidth/2-vw/2;
+ alto=ALTO.matches;salas=[].map.call(carril.querySelectorAll('.sala:not(.sala-antes):not(.sala-fim)'),function(s){return {s:s,c:s.offsetLeft+s.offsetWidth/2,l:s.querySelector('.s-leg'),r:s.querySelector('.s-res'),a:-1}});
+ if(!alto){palco.style.removeProperty('--fim');salas.forEach(function(o){o.s.style.removeProperty('--vo');o.s.classList.remove('apaga');o.l.style.translate=o.r.style.translate=''})}percurso=Math.max(0,railW-x0-vw);vooPx=vh*2.9;railPx=percurso*.85;voo.style.height=(vh+vooPx+railPx+vh*.15)+'px';top0=voo.offsetTop;yv=alvoY();agora=-1;quadro()}
 function bola(a,b,t){t=Math.min(1,Math.max(0,(t-a)/(b-a)));return t*t*(3-2*t)}
 // a aproximação: arranca e pousa com velocidade zero, sem correria a meio, e a travagem é mais longa do que o arranque
 function curva(p){var u=Math.pow(p,.85);return u*u*(3-2*u)}
@@ -66,7 +68,9 @@ function quadro(){
  }else tela.style.visibility='hidden';
  var ki=Math.min(1,s/s1);interior.style.transform='translate('+(scr.x-vw/2)+'px,'+(scr.y-vh/2)+'px) scale('+ki+')';
  luz.style.opacity=(.62*(1-bola(.26,.99,e))).toFixed(3);
- carril.style.transform='translate3d('+(-(x0+anda(q)*percurso))+'px,0,0)';
+ var rx=x0+anda(q)*percurso;carril.style.transform='translate3d('+(-rx)+'px,0,0)';
+ // ao alto o cartão tem a largura do ecrã: fica parado e troca-se num fundido, só a fotografia corre
+ if(alto){palco.style.setProperty('--fim',bola(.9,1,q).toFixed(3));salas.forEach(function(o){var dx=o.c-rx-vw/2,op=1-bola(.28,.5,Math.abs(dx)/vw),t=(-dx+Math.max(-12,Math.min(12,dx*.06))).toFixed(1)+'px 0';o.l.style.translate=o.r.style.translate=t;if(op!==o.a){o.a=op;o.s.style.setProperty('--vo',op.toFixed(3));o.s.classList.toggle('apaga',op<.5)}})}
  entrada.style.transform='translateY('+(-Math.min(1,p*7)*vh*.36)+'px)';entrada.style.opacity=(1-Math.min(1,p*7)).toFixed(3);
  rumo.style.opacity=p>.03?0:1;var mp=palco.querySelector('.marca-prop');if(mp)mp.style.opacity=p>.03?0:1;
  tela.style.pointerEvents=p<1?'auto':'none';
@@ -85,5 +89,5 @@ function fimAbre(){root.classList.add('titulo');abre.style.display='none';d.getE
 if(scrollY>10){fimAbre();return}
 pil.classList.add('oculta');
 // o logótipo sai para o corpo da página para voar por cima da pílula (por baixo dela apagava-se e reaparecia de repente); a cor muda num fundido de duas camadas, sem pintar nada durante o voo
-setTimeout(function(){var a=abre.getBoundingClientRect(),b=pil.querySelector('.pil-logo .logo').getBoundingClientRect(),br=abre.firstElementChild.cloneNode(true);abre.classList.add('a-voar');abre.style.cssText='position:fixed;left:'+a.left+'px;top:'+a.top+'px;width:'+a.width+'px;translate:none;margin:0;z-index:60;pointer-events:none';br.classList.add('abre-br');abre.appendChild(br);d.body.appendChild(abre);var feito=false,go=function(){if(feito)return;feito=true;fimAbre()};requestAnimationFrame(function(){requestAnimationFrame(function(){abre.style.transition='transform .6s cubic-bezier(.7,0,.2,1)';abre.style.transform='translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+b.width/a.width+')';br.style.opacity=1;abre.addEventListener('transitionend',go,{once:true});setTimeout(go,800)})})},1850);
+setTimeout(function(){var a=abre.getBoundingClientRect(),b=pil.querySelector('.pil-logo .logo').getBoundingClientRect(),br=abre.firstElementChild.cloneNode(true);abre.classList.add('a-voar');abre.style.cssText='position:fixed;left:'+a.left+'px;top:'+a.top+'px;width:'+a.width+'px;translate:none;margin:0;z-index:60;pointer-events:none';br.classList.add('abre-br');abre.appendChild(br);d.body.appendChild(abre);var feito=false,go=function(){if(feito)return;feito=true;fimAbre()};requestAnimationFrame(function(){requestAnimationFrame(function(){abre.style.transition='transform .6s cubic-bezier(.7,0,.2,1)';abre.style.transform='translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+b.width/a.width+')';br.style.opacity=1;abre.addEventListener('transitionend',function(e){if(e.target===abre&&e.propertyName==='transform')go()});setTimeout(go,800)})})},1850);
 })();
