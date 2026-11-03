@@ -12,7 +12,9 @@ var lay={};
 var revelada=false;function revela(){if(revelada||!lay.fachada||!lay.reflexo)return;revelada=true;agora=-1;quadro();tela.style.opacity=1;setTimeout(function(){interior.style.visibility='visible';poster.style.visibility='hidden'},520)}
 function pronta(n,im,box,w){lay[n]={i:im,b:box,w:w,t:n.indexOf('det')===0?performance.now():0};revela();corre()}
 function porImagem(n,src,box){var i=new Image();i.decoding='async';i.src=src;(i.decode?i.decode():Promise.resolve()).catch(function(){}).then(function(){if(i.naturalWidth)pronta(n,i,box,i.naturalWidth);else i.onload=function(){pronta(n,i,box,i.naturalWidth)}})}
-function carrega(n,src,box){if(!window.createImageBitmap||!window.fetch)return porImagem(n,src,box);fetch(src,{priority:'low'}).then(function(r){return r.blob()}).then(createImageBitmap).then(function(b){pronta(n,b,box,b.width)}).catch(function(){porImagem(n,src,box)})}
+// no motor do Safari (todos os browsers do iPhone) o ImageBitmap vindo de um blob pinta transparente: o canvas ficava vazio e a fachada desaparecia
+var wk=/AppleWebKit/.test(navigator.userAgent)&&!/Chrome\//.test(navigator.userAgent);
+function carrega(n,src,box){if(wk||!window.createImageBitmap||!window.fetch)return porImagem(n,src,box);fetch(src,{priority:'low'}).then(function(r){return r.blob()}).then(createImageBitmap).then(function(b){pronta(n,b,box,b.width)}).catch(function(){porImagem(n,src,box)})}
 var todo={x:0,y:0,w:W,h:H},detBox={x:2400,y:3100,w:2800,h:1600};
 // a frente e o pormenor chegam depois da primeira pintura
 var maisTarde=false;function resto(){if(maisTarde)return;maisTarde=true;carrega('fachada','/autogenial-demo/img/h/fachada.webp',todo);carrega('reflexo','/autogenial-demo/img/h/reflexo.webp',todo);carrega('det','/autogenial-demo/img/h/det.webp',detBox);carrega('detref','/autogenial-demo/img/h/detref.webp',detBox)}
